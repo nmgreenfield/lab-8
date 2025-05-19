@@ -121,7 +121,7 @@ get_text_from_page <- function(page, css_selector) {
     
   page %>%
     html_elements(css_selector) %>%
-    html_text()
+    html_text(trim = T)
 }
 
 get_url_from_page <- function(page, css_selector) {
@@ -213,6 +213,27 @@ obtain the following detailed information:
 
 (Just 10 to avoid overtaxing the website! Continue adding a 1 second pause
 between page queries.)
+
+```{r}
+#| label: helper functions 2
+
+scrape_cheese <- function(url) {
+    
+    # 1 second crawl delay
+    Sys.sleep(1)
+    
+    # Read the page
+    page <- read_html(url)
+    
+    # Grab elements from the page
+    get_text_from_page(page, ".summary_milk")
+    get_text_from_page(page, ".summary_country")
+    get_text_from_page(page, ".summary_family")
+    get_text_from_page(page, ".summary_moisture_and_type")
+    get_text_from_page(page, ".summary_taste")
+}
+```
+
 
 **Part 6:** Evaluate the code that you wrote in terms of **efficiency**. To
 what extent do your function(s) adhere to the **principles for writing good functions**?
