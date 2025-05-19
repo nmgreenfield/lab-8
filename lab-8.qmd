@@ -34,6 +34,29 @@ The `robots.txt` file tells us that anyone is allowed to scrape and there are no
 **Part 2:** Learn about the `html_attr()` function from `rvest`. Describe how
 this function works with a small example.
 
+```{r}
+#| label: html_attr
+
+cheese_page <- read_html("https://www.cheese.com")
+
+#Using html_attr() to find the destinations of all links on the cheese.com home page
+cheese_links <- cheese_page %>% 
+  html_elements("a") %>% 
+  html_attr("href")
+
+head(cheese_links)
+
+#Using html_attr() to find the sources of all images on the cheese.com home page
+cheese_pics <- cheese_page %>%
+  html_elements("img") %>%
+  html_attr("src")
+
+head(cheese_pics)
+
+```
+
+The `html_attr()` function takes an html document, node set, node, or session and retrieves a named attribute as defined by the user. The function will return a character vector, so post-processing may be needed to convert character strings into usable links or numbers. 
+
 **Part 3:** (Do this alongside Part 4 below.) I 
 used [ChatGPT](https://chat.openai.com/chat) to start the process of scraping
 cheese information with the following prompt:
