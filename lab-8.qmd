@@ -4,12 +4,28 @@ subtitle: "Cheese Gromit!"
 editor: source
 ---
 
+```{r}
+library(httr)
+library(curl)
+```
+
+
 > **Goal:** Scrape information from <https://www.cheese.com> to obtain a dataset
 > of characteristics about different cheeses, and gain deeper insight into your
 > coding process. 🪤
 
 **Part 1:** Locate and examine the `robots.txt` file for this website. Summarize
 what you learn from it.
+
+```{r}
+url <- "https://www.cheese.com/robots.txt"
+
+con <- curl(url)
+readLines(con)
+```
+
+The `robots.txt` file tells us that anyone is allowed to scrape and there are no disallowed sections. There are also no restrictions on when/how often the website can be scraped. 
+
 
 **Part 2:** Learn about the `html_attr()` function from `rvest`. Describe how
 this function works with a small example.
