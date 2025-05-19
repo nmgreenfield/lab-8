@@ -9,6 +9,7 @@ library(httr)
 library(curl)
 library(rvest)
 library(tidyverse)
+library(purrr)
 ```
 
 
@@ -151,6 +152,8 @@ scrape_page <- function(url) {
       url = cheese_url,
       image = has_image
     )
+    
+    return(cheeses)
 }
 
 ```
@@ -159,9 +162,18 @@ scrape_page <- function(url) {
 ```{r}
 #| label: All cheese info
 
-url <- "https://www.cheese.com/alphabetical"
+base_url <- "https://www.cheese.com/alphabetical/?per_page=100"
 
-tmp <- scrape_page(url)
+urls_all_pages <- c(str_c(base_url,
+                          "&page=",
+                          1:21)
+                     )
+
+all_pages <- map(urls_all_pages, scrape_page)
+
+all_cheeses <- bind_rows(all_pages)
+
+head(all_cheeses)
 ```
 
 
