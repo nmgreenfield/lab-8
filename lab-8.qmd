@@ -4,10 +4,11 @@ subtitle: "Cheese Gromit!"
 editor: source
 ---
 
-```{r}
+```{r, include=F}
 library(httr)
 library(curl)
-
+library(rvest)
+library(tidyverse)
 ```
 
 
@@ -19,6 +20,8 @@ library(curl)
 what you learn from it.
 
 ```{r}
+#| label: robot.txt
+
 url <- "https://www.cheese.com/robots.txt"
 
 con <- curl(url)
