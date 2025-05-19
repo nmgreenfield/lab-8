@@ -84,25 +84,29 @@ webpage <- read_html(url)
 # Extract the cheese names and URLs
 cheese_data <- webpage %>%
   
-  #NOTE - html_nodes is a deprecated function (better to use html_elements)
+#NOTE - html_nodes is a deprecated function (better to use html_elements)
   
   html_nodes(".cheese-item") %>% 
   
-  #NOTE - nothing is returned when searching for a ".cheese-item" node
+#NOTE - nothing is returned when searching for a ".cheese-item" node
   
   html_nodes("a") %>%
   html_attr("href") %>%
   
-  #NOTE - since no cheese names were passed through the pipeline above, the only output is "cheese.com"
+#NOTE - since no cheese names were passed through the pipeline above, the only output is "cheese.com"
   
   paste0("https://cheese.com", .)
 
 cheese_names <- webpage %>%
   html_nodes(".cheese-item h3") %>%
   html_text()
- #NOTE - 
+
+#NOTE - the code above returns another empty nodeset
 
 # Create a data frame to store the results
+
+#NOTE - there is no data to compile into a data frame, so this chunk throws an error
+
 cheese_df <- data.frame(Name = cheese_names,
                         URL = cheese_data,
                         stringsAsFactors = FALSE)
@@ -110,6 +114,8 @@ cheese_df <- data.frame(Name = cheese_names,
 # Print the data frame
 print(cheese_df)
 ```
+
+ChatGPT does provide some useful syntax for processing the cheese.com webpage. However, it uses outdated functions (html_nodes) and appears to hallucinate some of the node names. With some slight modifications, this generated code would be able to produce the desired results.
 
 **Part 4:** Obtain the following information for **all** cheeses in the
 database:
