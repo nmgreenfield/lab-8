@@ -90,6 +90,81 @@ database:
 To be kind to the website owners, please add a 1 second pause between page
 queries. (Note that you can view 100 cheeses at a time.)
 
+```{r}
+#| label: helper function
+
+get_text_from_page <- function(page, css_selector) {
+    
+  page %>%
+    html_elements(css_selector) %>%
+    html_text()
+}
+
+get_url_from_page <- function(page, css_selector) {
+    
+  page %>%
+    html_elements(css_selector) %>%
+    html_attr("href")
+}
+
+get_image_from_page <- function(page, css_selector) {
+    
+  page %>%
+    html_elements(css_selector) %>%
+    html_attr("src")
+}
+
+scrape_page <- function(url) {
+    
+    # 1 second crawl delay
+    Sys.sleep(1)
+    
+    # Read the page
+    page <- read_html(url)
+    
+    # Grab elements from the page
+    cheese_names <- get_text_from_page(page, ".product-item")
+    cheese_url <- get_url_from_page(page, ".product-item a")
+    cheese_image <- get_image_from_page(page, ".product-item img")
+    
+    # Clean cheese names
+    cheese_names <- cheese_names %>%
+      trimws()
+    
+    cheese_names <- ifelse(
+      str_detect(cheese_names, "Stores >"),
+      str_trim(str_extract(cheese_names, "[^\n]+$")),
+      cheese_names
+      )
+    
+    # Full cheese URL
+    base_url <- "https://www.cheese.com"
+    cheese_url <- paste0(base_url, cheese_url)
+    cheese_url <- unique(cheese_url[!grepl("store", cheese_url)]) #remove store links + duplicates
+    
+    # Find cheeses with image
+    has_image <- ifelse(grepl("static", cheese_image), "No", "Yes")
+    
+    #Put page elements into a dataframe
+    cheeses <- data.frame(
+      cheese = cheese_names,
+      url = cheese_url,
+      image = has_image
+    )
+}
+
+```
+
+
+```{r}
+#| label: All cheese info
+
+url <- "https://www.cheese.com/alphabetical"
+
+tmp <- scrape_page(url)
+```
+
+
 **Part 5:** When you go to a particular cheese's page (like 
 [gouda](https://www.cheese.com/gouda/)), you'll see more detailed information
 about the cheese. For [**just 10**]{.underline} of the cheeses in the database,
