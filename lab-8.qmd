@@ -83,14 +83,24 @@ webpage <- read_html(url)
 
 # Extract the cheese names and URLs
 cheese_data <- webpage %>%
-  html_nodes(".cheese-item") %>%
+  
+  #NOTE - html_nodes is a deprecated function (better to use html_elements)
+  
+  html_nodes(".cheese-item") %>% 
+  
+  #NOTE - nothing is returned when searching for a ".cheese-item" node
+  
   html_nodes("a") %>%
   html_attr("href") %>%
+  
+  #NOTE - since no cheese names were passed through the pipeline above, the only output is "cheese.com"
+  
   paste0("https://cheese.com", .)
 
 cheese_names <- webpage %>%
   html_nodes(".cheese-item h3") %>%
   html_text()
+ #NOTE - 
 
 # Create a data frame to store the results
 cheese_df <- data.frame(Name = cheese_names,
