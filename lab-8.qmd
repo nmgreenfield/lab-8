@@ -233,6 +233,15 @@ between page queries.)
 ```{r}
 #| label: helper functions 2
 
+clean_info <- function(text, fallback) {
+  if (length(text) == 0) {
+    return(fallback)
+  } else {
+    cleaned <- sub(".*?:\\s*", "", text) # Extract everything after ": "
+    return(trimws(cleaned))
+  }
+}
+
 scrape_cheese <- function(url) {
     
     # 1 second crawl delay
@@ -242,13 +251,47 @@ scrape_cheese <- function(url) {
     page <- read_html(url)
     
     # Grab elements from the page
-    get_text_from_page(page, ".summary_milk")
-    get_text_from_page(page, ".summary_country")
-    get_text_from_page(page, ".summary_family")
-    get_text_from_page(page, ".summary_moisture_and_type")
-    get_text_from_page(page, ".summary_taste")
+    milk <- get_text_from_page(page, ".summary_milk")
+    country <- get_text_from_page(page, ".summary_country")
+    family <- get_text_from_page(page, ".summary_family")
+    type <- get_text_from_page(page, ".summary_moisture_and_type")
+    flavor <- get_text_from_page(page, ".summary_taste")
+    
+    # Clean elements
+    milk_clean <- clean_info(milk, "No milk information available")
+    country_clean <- clean_info(country, "No country information available")
+    family_clean <- clean_info(family, "No family information available")
+    type_clean <- clean_info(type, "No type information available")
+    flavor_clean <- clean_info(flavor, "No flavor information available")
+    
+    cheese <- data.frame(
+      milk = milk_clean,
+      country = country_clean,
+      family = family_clean,
+      type = type_clean,
+      flavor = flavor_clean
+    )
 }
 ```
+
+
+```{r}
+#| label: cheese detail info
+
+sampled_cheeses <- all_cheeses %>%
+  sample_n(10)
+
+detailed_cheeses <- sampled_cheeses$url %>%
+  map_df(scrape_cheese)
+
+final_cheese_info <- bind_cols(
+  sampled_cheeses %>% select(cheese),
+  detailed_cheeses
+)
+
+print(final_cheese_info)
+```
+
 
 
 **Part 6:** Evaluate the code that you wrote in terms of **efficiency**. To
