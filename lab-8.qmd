@@ -258,19 +258,19 @@ scrape_cheese <- function(url) {
     flavor <- get_text_from_page(page, ".summary_taste")
     
     # Clean elements
-    milk_clean <- clean_info(milk, "No milk information available")
-    country_clean <- clean_info(country, "No country information available")
-    family_clean <- clean_info(family, "No family information available")
-    type_clean <- clean_info(type, "No type information available")
-    flavor_clean <- clean_info(flavor, "No flavor information available")
+    milk <- clean_info(milk, "No milk information available")
+    country <- clean_info(country, "No country information available")
+    family <- clean_info(family, "No family information available")
+    type <- clean_info(type, "No type information available")
+    flavor <- clean_info(flavor, "No flavor information available")
     
     # Puts elements into data frame
     cheese <- data.frame(
-      milk = milk_clean,
-      country = country_clean,
-      family = family_clean,
-      type = type_clean,
-      flavor = flavor_clean
+      milk = milk,
+      country = country,
+      family = family,
+      type = type,
+      flavor = flavor
     )
 }
 ```
