@@ -116,7 +116,7 @@ cheese_df <- data.frame(Name = cheese_names,
 print(cheese_df)
 ```
 
-ChatGPT does provide some useful syntax for processing the cheese.com webpage. However, it uses outdated functions (html_nodes) and appears to hallucinate some of the node names. With some slight modifications, this generated code would be able to produce the desired results.
+ChatGPT does provide some useful syntax for processing the cheese.com webpage. However, it uses outdated functions (`html_nodes()`) and appears to hallucinate some of the node names. With some slight modifications, this generated code would be able to produce the desired results.
 
 **Part 4:** Obtain the following information for **all** cheeses in the
 database:
@@ -299,3 +299,13 @@ print(final_cheese_info)
 what extent do your function(s) adhere to the **principles for writing good functions**?
 To what extent are your **functions efficient**? To what extent is your 
 **iteration of these functions efficient**? 
+
+The functions for scraping cheese.com are efficient for the following reasons:
+
+-  Pipes are used within the helper functions to reduce the number of intermediate objects and decrease the memory demand.
+-  Helper functions within `scrape_page()` and `scrape_cheese()` handle repetitive CSS selection tasks.
+-  The removal of duplicate links uses a regular expression (`grepl()`) instead of less-efficient *for* loops.
+-  The `scrape_cheese()` function provides clear alternatives for cases when data are missing (referred to as *fallbacks* within the function call). This makes the function more efficient and informative from a user's perspective. 
+-  The functions utilize existing functions that are already efficient, such as `trimws()` for cutting out whitespaces, as opposed to "reinventing the wheel" and writing less-efficient functions.
+
+The iteration of the functions is efficient because the `map()` and `map_df()` functions are used instead of less-efficient *for* loops for iterating over the URLs.
